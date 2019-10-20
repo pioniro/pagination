@@ -1,0 +1,50 @@
+{
+    "name": "pioniro/pagination",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Alexey Fedorov",
+            "email": "piniro@yandex.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.1"
+    },
+    "suggest": {
+        "doctrine/orm": "^2.6",
+        "symfony/dependency-injection": "^3.3 || ^4.0",
+        "symfony/framework-bundle": "^3.0 || ^4.0"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^4",
+        "matthiasnoback/symfony-dependency-injection-test": "^3.1",
+        "symfony/phpunit-bridge": "^4",
+        "phpunit/phpunit": "^8.4",
+        "symfony/yaml": "^4.3",
+        "doctrine/orm": "^2.6",
+        "symfony/dependency-injection": "^3.3 || ^4.0",
+        "symfony/framework-bundle": "^3.0 || ^4.0",
+        "php-coveralls/php-coveralls": "^2.1"
+    },
+    "description": "simple bundle for pagination purpose",
+
+    "autoload": {
+        "psr-4": {
+            "Pioniro\\Pagination\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "classmap": [
+            "tests/helpers/Test.php",
+            "tests/helpers/Test0.php",
+            "tests/helpers/Test1.php",
+            "tests/helpers/Test2.php",
+            "tests/helpers/init.php",
+            "tests/helpers/DummyPager.php"
+        ]
+    },
+    "scripts": {
+        "test": "./vendor/bin/phpunit"
+    }
+}

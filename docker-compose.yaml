@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+    postgres:
+        image: postgres:11-alpine
+        expose:
+            - "5432"
+        volumes:
+          - ./tests/init.sql:/docker-entrypoint-initdb.d/
+        environment:
+            POSTGRES_DB: project
+            POSTGRES_USER: pagination
+            POSTGRES_PASSWORD: pagination
+            PGDATA: /var/lib/postgresql/data/pgdata
+    app:
+        build: .
+        volumes:
+            - ./:/var/www/project
+            - composer:/var/www/.composer
+        depends_on:
+            - postgres
+        environment:
+            POSTGRES_PORT: '5432'
+            POSTGRES_NAME: project
+            POSTGRES_HOST: postgres
+            POSTGRES_USER: pagination
+            POSTGRES_PASSWORD: pagination
+            PGDATA: /var/lib/postgresql/data/pgdata
+        working_dir: /var/www/project
+        command: tail -f /dev/null
+volumes:
+  composer:
