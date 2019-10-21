@@ -1,8 +1,13 @@
 Simple paginator
 ================
 
+[![Build Status](https://travis-ci.org/pioniro/pagination.svg?branch=master)](https://travis-ci.org/pioniro/pagination)
+
 ## Install
 
+```bash
+composer require pioniro/pagination
+```
 
 ##Usage
 
