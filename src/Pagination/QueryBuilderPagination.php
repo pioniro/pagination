@@ -4,11 +4,14 @@ declare(strict_types=1);
 namespace Pioniro\Pagination\Pagination;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Pioniro\Pagination\Helper\CursorPaginationHelper;
 use Pioniro\Pagination\Exception\PaginatorException;
 use Pioniro\Pagination\Helper\QueryBuilderHandlerHelper;
 use Pioniro\Pagination\Pager\CursorPager;
+use Pioniro\Pagination\Pager\OffsetPager;
 use Pioniro\Pagination\PagerInterface;
+use Pioniro\Pagination\Paginator\Paginator as PioniroPaginator;
 use Pioniro\Pagination\PaginatorInterface;
 
 class QueryBuilderPagination extends AbstractPagination
@@ -39,6 +42,11 @@ class QueryBuilderPagination extends AbstractPagination
     protected $id;
 
     /**
+     * @var int
+     */
+    protected $totalRows;
+
+    /**
      * Pagination constructor.
      * @param QueryBuilder $qb
      * @param PagerInterface $pagination
@@ -65,6 +73,8 @@ class QueryBuilderPagination extends AbstractPagination
     {
         if ($this->pager instanceof CursorPager) {
             $this->handleCursorPagination();
+        }elseif( $this->pager instanceof OffsetPager) {
+            $this->handleOffsetPagination();
         }
     }
 
@@ -73,19 +83,38 @@ class QueryBuilderPagination extends AbstractPagination
         QueryBuilderHandlerHelper::handle($this->qb, $this->pager, $this->idField);
     }
 
+    protected function handleOffsetPagination()
+    {
+        $paginator = new Paginator($this->qb);
+        $this->totalRows = $paginator->count();
+        $this->items = iterator_to_array($paginator->getIterator());
+    }
+
     protected function createPaginator(): PaginatorInterface
     {
         if ($this->pager instanceof CursorPager) {
             $this->handleQueryPagination();
             $this->items = $this->qb->getQuery()->execute();
-            return $this->createCursorPager();
+            return $this->createCursorPaginator();
+        } elseif($this->pager instanceof OffsetPager) {
+            $this->handleQueryPagination();
+            return $this->createOffsetPaginator();
         }
         throw PaginatorException::pagerNotSupported($this->pager);
     }
 
 
-    protected function createCursorPager(): PaginatorInterface
+    protected function createCursorPaginator(): PaginatorInterface
     {
         return CursorPaginationHelper::create($this->items, $this->pager, $this->id);
+    }
+
+    protected function createOffsetPaginator(): PaginatorInterface
+    {
+        $offset = $this->pager->getOffset() + count($this->items);
+        return new PioniroPaginator(
+            $this->items,
+            new OffsetPager($this->pager->getLimit(), $offset, $this->totalRows)
+        );
     }
 }
