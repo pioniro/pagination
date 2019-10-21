@@ -12,7 +12,9 @@ before_install:
     - sudo mv docker-compose /usr/local/bin
 
 before_script:
-    - docker-compose up -d --build
+    - docker-compose up postgres -d --build
+    - sleep 2
+    - docker-compose up app -d --build
     - docker-compose exec app composer install
 script:
     - docker-compose exec app vendor/bin/phpunit --color -c phpunit.xml.dist
