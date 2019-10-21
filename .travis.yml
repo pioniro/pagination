@@ -1,25 +1,29 @@
 sudo: required
 language: php
+services:
+    - postgresql
+addons:
+    postgresql: '11.2'
 php:
+#    - '7.1'
+#    - '7.2'
     - '7.3'
+
 env:
-    - DOCKER_COMPOSE_VERSION=1.24.1
+    - POSTGRES_NAME=project
+    - POSTGRES_PORT=5432
+    - POSTGRES_HOST=localhost
+    - POSTGRES_USER=postgres
+    - POSTGRES_PASSWORD=
 
 before_install:
-    - sudo rm /usr/local/bin/docker-compose
-    - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
-    - chmod +x docker-compose
-    - sudo mv docker-compose /usr/local/bin
-    - docker-compose pull
+    - psql -f /docker-entrypoint-initdb.d/init.sql -U postgres
 
 before_script:
-    - docker-compose up -d postgres
-    - sleep 5
-    - docker-compose exec postgres psql project pagination -f /docker-entrypoint-initdb.d/init.sql
-    - docker-compose up -d --build app
-    - docker-compose exec app composer install
+    - composer install
+
 script:
-    - docker-compose exec app vendor/bin/phpunit --color -c phpunit.xml.dist
+    - vendor/bin/phpunit --color -c phpunit.xml.dist
 
 after_success:
-    - travis_retry docker-compose exec app vendor/bin/php-coveralls
+    - travis_retry vendor/bin/php-coveralls
