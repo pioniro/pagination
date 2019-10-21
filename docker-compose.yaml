@@ -13,11 +13,7 @@ services:
             POSTGRES_USER: pagination
             POSTGRES_PASSWORD: pagination
             PGDATA: /var/lib/postgresql/data/pgdata
-        healthcheck:
-            test: ["CMD-SHELL", "pg_isready -U pagination"]
-            interval: 10s
-            timeout: 5s
-            retries: 5
+
     app:
         build: .
         volumes:
