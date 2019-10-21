@@ -12,6 +12,7 @@ before_install:
     - sudo mv docker-compose /usr/local/bin
 
 before_script:
+    - docker-compose pull
     - docker-compose up -d --build postgres
     - sleep 5
     - docker-compose exec postgres psql project pagination -f /docker-entrypoint-initdb.d/init.sql
