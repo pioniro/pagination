@@ -5,9 +5,11 @@ namespace Pioniro\Pagination\Pagination;
 use Pioniro\Pagination\PaginationInterface;
 use Pioniro\Pagination\PaginatorInterface;
 use Pioniro\Pagination\PagerInterface;
+use Pioniro\Pagination\Traits\Arrayable;
 
 abstract class AbstractPagination implements PaginationInterface
 {
+    use Arrayable;
     /**
      * @var PaginatorInterface
      */
@@ -29,6 +31,11 @@ abstract class AbstractPagination implements PaginationInterface
     {
         $this->execute();
         return $this->paginator->getPager();
+    }
+
+    public function getIterator()
+    {
+        return $this->getPaginator()->getIterator();
     }
 
 //    abstract public function execute();

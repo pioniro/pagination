@@ -4,6 +4,9 @@ declare(strict_types=1);
 namespace Pioniro\Pagination\Pager;
 use Pioniro\Pagination\PagerInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 class CursorPager implements PagerInterface
 {
     /**

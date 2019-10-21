@@ -3,7 +3,12 @@ declare(strict_types=1);
 
 namespace Pioniro\Pagination;
 
-interface PaginatorInterface
+use Countable;
+use Serializable;
+use ArrayAccess;
+use SeekableIterator;
+
+interface PaginatorInterface extends SeekableIterator, ArrayAccess, Serializable, Countable
 {
     /**
      * @return array|iterable
