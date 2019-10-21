@@ -13,7 +13,7 @@ before_install:
 
 before_script:
     - docker-compose up -d --build postgres
-    - sleep 2
+    - sleep 5
     - docker-compose exec postgres psql project pagination -f /docker-entrypoint-initdb.d/init.sql
     - docker-compose up -d --build app
     - docker-compose exec app composer install
