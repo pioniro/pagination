@@ -2,6 +2,7 @@ Simple paginator
 ================
 
 [![Build Status](https://travis-ci.org/pioniro/pagination.svg?branch=master)](https://travis-ci.org/pioniro/pagination)
+[![Coverage Status](https://coveralls.io/repos/github/pioniro/pagination/badge.svg?branch=master)](https://coveralls.io/github/pioniro/pagination?branch=master)
 
 ## Install
 
