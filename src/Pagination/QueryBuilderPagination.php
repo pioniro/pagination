@@ -76,6 +76,9 @@ class QueryBuilderPagination extends AbstractPagination
         if ($this->pager instanceof CursorPager) {
             $this->handleCursorPagination();
         } elseif ($this->pager instanceof OffsetPager) {
+            $this->qb
+                ->setMaxResults($this->pager->getLimit())
+                ->setFirstResult($this->pager->getOffset());
             $this->handleOffsetPagination();
         }
     }
