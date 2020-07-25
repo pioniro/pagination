@@ -87,6 +87,9 @@ class QueryBuilderPagination extends AbstractPagination
 
     protected function handleOffsetPagination()
     {
+        $this->qb
+                ->setMaxResults($this->pager->getLimit())
+                ->setFirstResult($this->pager->getOffset());
         $paginator = new Paginator($this->qb);
         $this->totalRows = $paginator->count();
         $this->items = iterator_to_array($paginator->getIterator());
